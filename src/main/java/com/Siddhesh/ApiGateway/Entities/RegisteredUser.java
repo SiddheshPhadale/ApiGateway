@@ -18,6 +18,5 @@ public class RegisteredUser {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    @Column(name = "api_list")
     private List<ApiRegistrationBody> apiList;
 }
