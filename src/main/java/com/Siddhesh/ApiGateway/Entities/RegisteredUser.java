@@ -10,7 +10,7 @@ import java.util.List;
 @Table(name = "Api_Owner")
 public class RegisteredUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
     private String userName;
     private String userEmail;

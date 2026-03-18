@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ApiProviderServices {
 
@@ -28,5 +30,21 @@ public class ApiProviderServices {
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public ResponseEntity<?> registerUser(RegisteredUser user){
+        try {
+            userRepo.save(user);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ResponseEntity<?> getAllApiByUsername(String name){
+        RegisteredUser user = userRepo.findByUserName(name);
+        if(user != null){
+            return new ResponseEntity<>(user.getApiList(), HttpStatus.OK);
+        }else return new ResponseEntity<>("User not found!!",HttpStatus.BAD_REQUEST);
     }
 }
