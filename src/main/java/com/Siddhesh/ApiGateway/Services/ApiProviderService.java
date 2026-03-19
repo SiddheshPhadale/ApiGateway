@@ -3,6 +3,7 @@ package com.Siddhesh.ApiGateway.Services;
 import com.Siddhesh.ApiGateway.Dto.ApiProviderDto;
 import com.Siddhesh.ApiGateway.Entities.ApiProvider;
 import com.Siddhesh.ApiGateway.Repositories.ApiOwnerRepo;
+import com.Siddhesh.ApiGateway.Services.MapperService.ApiProviderMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -13,10 +14,10 @@ public class ApiProviderService {
 
     private final ApiOwnerRepo userRepo;
 
-    private final ApiProviderMapper ApiMapper;
+    private final ApiProviderMapper mapper;
 
     public HttpStatus registerUser(ApiProviderDto userDto){
-        ApiProvider apiProvider = ApiMapper.mapToUser(userDto);
+        ApiProvider apiProvider = mapper.mapToUser(userDto);
         userRepo.save(apiProvider);
         return HttpStatus.CREATED;
     }

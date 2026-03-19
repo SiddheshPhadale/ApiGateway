@@ -1,4 +1,4 @@
-package com.Siddhesh.ApiGateway.Services;
+package com.Siddhesh.ApiGateway.Services.MapperService;
 
 import com.Siddhesh.ApiGateway.Dto.ApiRegistrationBodyDto;
 import com.Siddhesh.ApiGateway.Dto.ResponceApiDto;

@@ -7,6 +7,7 @@ import com.Siddhesh.ApiGateway.Entities.ApiProvider;
 import com.Siddhesh.ApiGateway.Exceptions.UserNotFoundException;
 import com.Siddhesh.ApiGateway.Repositories.ApiOwnerRepo;
 import com.Siddhesh.ApiGateway.Repositories.ApiRepo;
+import com.Siddhesh.ApiGateway.Services.MapperService.ApiMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
