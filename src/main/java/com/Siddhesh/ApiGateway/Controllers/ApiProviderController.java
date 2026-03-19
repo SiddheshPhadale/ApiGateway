@@ -21,7 +21,7 @@ public class ApiProviderController {
     private final ApiProviderService service;
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody ApiProviderDto user){
+    public ResponseEntity<HttpStatus> registerUser(@Valid @RequestBody ApiProviderDto user){
         HttpStatus status = service.registerUser(user);
         return new ResponseEntity<>(status);
     }

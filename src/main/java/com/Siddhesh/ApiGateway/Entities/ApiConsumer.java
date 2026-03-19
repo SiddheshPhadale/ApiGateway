@@ -1,5 +1,6 @@
 package com.Siddhesh.ApiGateway.Entities;
 
+import com.Siddhesh.ApiGateway.Dto.ResponceApiDto;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -7,10 +8,10 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "Api_Owner")
 @PrimaryKeyJoinColumn
-public class ApiProvider extends BaseUser{
+@Table(name = "api_consumers")
+public class ApiConsumer extends BaseUser{
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    private List<ApiBody> apiList;
+    private List<Subscription> subscriptions;
 }

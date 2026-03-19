@@ -4,6 +4,7 @@ import com.Siddhesh.ApiGateway.Dto.ApiRegistrationBodyDto;
 import com.Siddhesh.ApiGateway.Dto.ResponceApiDto;
 import com.Siddhesh.ApiGateway.Entities.ApiBody;
 import com.Siddhesh.ApiGateway.Entities.ApiProvider;
+import com.Siddhesh.ApiGateway.Exceptions.DuplicateApiNameException;
 import com.Siddhesh.ApiGateway.Exceptions.UserNotFoundException;
 import com.Siddhesh.ApiGateway.Repositories.ApiOwnerRepo;
 import com.Siddhesh.ApiGateway.Repositories.ApiRepo;
@@ -32,6 +33,15 @@ public class ApiServices {
     public ResponceApiDto registerApi(ApiRegistrationBodyDto apiDto, String userName){
             ApiProvider apiProvider = userRepo.findByUserName(userName);
             if (apiProvider != null){
+                boolean isDuplicate = apiProvider.getApiList()
+                        .stream()
+                        .anyMatch(
+                                api -> api.getApiName().equalsIgnoreCase(apiDto.getApiName())
+                        );
+
+                if (isDuplicate){
+                    throw new DuplicateApiNameException("Api with the name : " + apiDto.getApiName() +" already exists.");
+                }
                 ApiBody body = ApiMapper.mapToApiBody(apiDto);
                 body.setApiKey("gw_" + generateApiKey());
                 ApiBody apiBody = apiRepo.save(body);

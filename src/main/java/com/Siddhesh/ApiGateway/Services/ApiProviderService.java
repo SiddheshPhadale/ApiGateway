@@ -1,7 +1,9 @@
 package com.Siddhesh.ApiGateway.Services;
 
 import com.Siddhesh.ApiGateway.Dto.ApiProviderDto;
+import com.Siddhesh.ApiGateway.Dto.RegisterApiConsumerDto;
 import com.Siddhesh.ApiGateway.Entities.ApiProvider;
+import com.Siddhesh.ApiGateway.Entities.Role;
 import com.Siddhesh.ApiGateway.Repositories.ApiOwnerRepo;
 import com.Siddhesh.ApiGateway.Services.MapperService.ApiProviderMapper;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ public class ApiProviderService {
 
     public HttpStatus registerUser(ApiProviderDto userDto){
         ApiProvider apiProvider = mapper.mapToUser(userDto);
+        apiProvider.setRole(Role.PROVIDER);
         userRepo.save(apiProvider);
         return HttpStatus.CREATED;
     }
