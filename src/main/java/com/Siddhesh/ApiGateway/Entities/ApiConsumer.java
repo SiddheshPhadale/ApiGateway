@@ -1,6 +1,5 @@
 package com.Siddhesh.ApiGateway.Entities;
 
-import com.Siddhesh.ApiGateway.Dto.ResponceApiDto;
 import jakarta.persistence.*;
 import lombok.Data;
 

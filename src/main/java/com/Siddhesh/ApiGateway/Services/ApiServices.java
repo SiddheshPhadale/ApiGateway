@@ -1,9 +1,10 @@
 package com.Siddhesh.ApiGateway.Services;
 
 import com.Siddhesh.ApiGateway.Dto.ApiRegistrationBodyDto;
-import com.Siddhesh.ApiGateway.Dto.ResponceApiDto;
+import com.Siddhesh.ApiGateway.Dto.ApiResponseDto;
 import com.Siddhesh.ApiGateway.Entities.ApiBody;
 import com.Siddhesh.ApiGateway.Entities.ApiProvider;
+import com.Siddhesh.ApiGateway.Entities.Status;
 import com.Siddhesh.ApiGateway.Exceptions.DuplicateApiNameException;
 import com.Siddhesh.ApiGateway.Exceptions.UserNotFoundException;
 import com.Siddhesh.ApiGateway.Repositories.ApiOwnerRepo;
@@ -27,10 +28,8 @@ public class ApiServices {
 
     private final ApiMapper ApiMapper;
 
-    private static final SecureRandom random = new SecureRandom();
-
     @Transactional
-    public ResponceApiDto registerApi(ApiRegistrationBodyDto apiDto, String userName){
+    public ApiResponseDto registerApi(ApiRegistrationBodyDto apiDto, String userName){
             ApiProvider apiProvider = userRepo.findByUserName(userName);
             if (apiProvider != null){
                 boolean isDuplicate = apiProvider.getApiList()
@@ -43,7 +42,7 @@ public class ApiServices {
                     throw new DuplicateApiNameException("Api with the name : " + apiDto.getApiName() +" already exists.");
                 }
                 ApiBody body = ApiMapper.mapToApiBody(apiDto);
-                body.setApiKey("gw_" + generateApiKey());
+                body.setStatus(Status.ACTIVE);
                 ApiBody apiBody = apiRepo.save(body);
                 apiProvider.getApiList().add(apiBody);
                 userRepo.save(apiProvider);
@@ -52,17 +51,13 @@ public class ApiServices {
             else throw new UserNotFoundException("User with username : " + userName + " not found.");
     }
 
-    public List<ResponceApiDto> getAllApiByUsername(String name){
+    @Transactional
+    public List<ApiResponseDto> getAllApiByUsername(String name){
+        System.out.println("in service");
         ApiProvider apiProvider = userRepo.findByUserName(name);
         if(apiProvider != null){
             List<ApiBody> originalList = apiProvider.getApiList();
             return originalList.stream().map(ApiMapper::mapToResponceApiDto).toList();
         }else throw new UserNotFoundException("User is not present!!");
-    }
-
-    private String generateApiKey(){
-        byte[] bytes = new byte[32];
-        random.nextBytes(bytes);
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
 }

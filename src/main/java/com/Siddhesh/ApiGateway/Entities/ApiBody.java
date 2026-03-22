@@ -16,8 +16,7 @@ public class ApiBody {
     private String apiName;
     @Column(nullable = false)
     private String link;
-    @Column(unique = true, nullable = false)
-    private String apiKey;
     @Size(max = 500)
     private String apiDescription;
+    private Status status;
 }

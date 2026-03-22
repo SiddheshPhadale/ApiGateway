@@ -1,6 +1,6 @@
 package com.Siddhesh.ApiGateway.Entities;
 
-public enum SubscriptionStatus{
+public enum Status {
     ACTIVE,
     SUSPENDED,
     CANCELLED

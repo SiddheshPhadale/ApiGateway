@@ -17,4 +17,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleDuplicateApiName(DuplicateApiNameException ex){
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(ApiNotFound.class)
+    public ResponseEntity<String> handleApiNotFound(ApiNotFound ex){
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DuplicateSubscriptionException.class)
+    public ResponseEntity<String> handleDuplicateSubscription(DuplicateSubscriptionException ex){
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
 }

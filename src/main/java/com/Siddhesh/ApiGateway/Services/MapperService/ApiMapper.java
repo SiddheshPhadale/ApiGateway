@@ -1,7 +1,7 @@
 package com.Siddhesh.ApiGateway.Services.MapperService;
 
 import com.Siddhesh.ApiGateway.Dto.ApiRegistrationBodyDto;
-import com.Siddhesh.ApiGateway.Dto.ResponceApiDto;
+import com.Siddhesh.ApiGateway.Dto.ApiResponseDto;
 import com.Siddhesh.ApiGateway.Entities.ApiBody;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -10,11 +10,10 @@ import org.mapstruct.Mapping;
 public interface ApiMapper {
 
     @Mapping(source = "link", target = "apiLink")
-    @Mapping(target = "apiKey" , ignore = true)
-    ResponceApiDto mapToResponceApiDto(ApiBody apiBody);
+    ApiResponseDto mapToResponceApiDto(ApiBody apiBody);
 
     @Mapping(source = "link", target = "apiLink")
-    ResponceApiDto mapToApiRegistrationResponse(ApiBody apiBody);
+    ApiResponseDto mapToApiRegistrationResponse(ApiBody apiBody);
 
     ApiBody mapToApiBody(ApiRegistrationBodyDto apiDto);
 }

@@ -19,7 +19,7 @@ import lombok.Data;
         @Column(unique = true, nullable = false)
         private String apiKey;
         @Enumerated(EnumType.STRING)
-        private  SubscriptionStatus status;
+        private Status status;
     }
 
 
