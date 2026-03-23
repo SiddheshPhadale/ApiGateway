@@ -31,7 +31,6 @@ public class ApiController {
 
     @GetMapping("/myapi")
     public ResponseEntity<List<ApiResponseDto>> getAllApiByUsername(){
-        System.out.println("in controller");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         System.out.println(authentication.getAuthorities());
         List list = service.getAllApiByUsername(authentication.getName());

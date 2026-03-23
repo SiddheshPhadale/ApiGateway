@@ -10,12 +10,9 @@ import com.Siddhesh.ApiGateway.Exceptions.UserNotFoundException;
 import com.Siddhesh.ApiGateway.Repositories.ApiOwnerRepo;
 import com.Siddhesh.ApiGateway.Repositories.ApiRepo;
 import com.Siddhesh.ApiGateway.Services.MapperService.ApiMapper;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.security.SecureRandom;
-import java.util.Base64;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
@@ -53,7 +50,6 @@ public class ApiServices {
 
     @Transactional
     public List<ApiResponseDto> getAllApiByUsername(String name){
-        System.out.println("in service");
         ApiProvider apiProvider = userRepo.findByUserName(name);
         if(apiProvider != null){
             List<ApiBody> originalList = apiProvider.getApiList();

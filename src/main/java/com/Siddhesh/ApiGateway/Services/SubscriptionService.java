@@ -60,8 +60,8 @@ public class SubscriptionService {
     }
     @Transactional
     public List<SubscriptionResponseDto> getAllSubscriptions(String userName){
-        ApiConsumer consumer = consumerRepo.findByUserNameWithSubscriptions(userName);
-        System.out.println("Subscriptions size: " + consumer.getSubscriptions().size());
+        ApiConsumer consumer = consumerRepo.findByUserName(userName);
+//        System.out.println("Subscriptions size: " + consumer.getSubscriptions().size());
 
         if (consumer == null) throw new UserNotFoundException("Requested user is not found!");
 

@@ -12,7 +12,4 @@ import java.util.List;
 @Repository
 public interface ApiConsumerRepo extends JpaRepository<ApiConsumer, Long> {
     ApiConsumer findByUserName(String name);
-
-    @Query("SELECT c FROM ApiConsumer c LEFT JOIN FETCH c.subscriptions WHERE c.userName = :userName")
-    ApiConsumer findByUserNameWithSubscriptions(@Param("userName") String userName);
 }
