@@ -2,6 +2,7 @@ package com.Siddhesh.ApiGateway.Entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import java.util.List;
 @Data
 @Table(name = "Api_Owner")
 @PrimaryKeyJoinColumn
+@ToString(exclude = "apiList")
 public class ApiProvider extends BaseUser{
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")

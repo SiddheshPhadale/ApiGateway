@@ -29,12 +29,6 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30
 
-        String path = request.getServletPath();
-        if (path.contains("/login") || path.contains("/signup")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         String authHeader = request.getHeader("Authorization");
         String token = null;
         String username = null;
@@ -44,8 +38,6 @@ public class JwtFilter extends OncePerRequestFilter {
             username = jwtService.extractUsername(token);
 
             UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
-            System.out.println("Authorities: " + userDetails.getAuthorities());
-            System.out.println("Username: " + userDetails.getUsername());
             if(jwtService.isTokenValid(token, userDetails)){
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(

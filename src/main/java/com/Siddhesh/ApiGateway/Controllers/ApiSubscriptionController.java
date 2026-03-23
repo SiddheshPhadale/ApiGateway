@@ -22,6 +22,7 @@ public class ApiSubscriptionController {
 
     @PostMapping
     public ResponseEntity<SubscriptionResponseDto> subscribe(@Valid @RequestBody SubscriptionRequestDto subscriptionRequestDto){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return new ResponseEntity<>(service.subscribe(subscriptionRequestDto), HttpStatus.CREATED);
     }
 
