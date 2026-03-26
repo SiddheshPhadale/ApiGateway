@@ -28,7 +28,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity){
         httpSecurity.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(httpRequest ->
-                        httpRequest.requestMatchers("/api/v1/auth/**").permitAll()
+                        httpRequest.requestMatchers("/api/v1/auth/**", "/proxy/**").permitAll()
                                 .requestMatchers("/api/v1/apis/**").hasAuthority("PROVIDER")
                                 .requestMatchers("/api/v1/subscription/**").hasAuthority("CONSUMER")
                                 .anyRequest().authenticated()
