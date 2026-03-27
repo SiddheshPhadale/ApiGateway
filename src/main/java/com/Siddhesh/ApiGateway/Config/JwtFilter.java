@@ -1,7 +1,7 @@
 package com.Siddhesh.ApiGateway.Config;
 
-import com.Siddhesh.ApiGateway.Services.CustomUserDetailService;
-import com.Siddhesh.ApiGateway.Services.JwtService;
+import com.Siddhesh.ApiGateway.Auth.Service.CustomUserDetailService;
+import com.Siddhesh.ApiGateway.Auth.Service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
