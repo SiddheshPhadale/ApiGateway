@@ -5,40 +5,24 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 @Service
 public class JwtService {
 
-    private String SecretKey = "";
-
-    public JwtService(){
-        try {
-            KeyGenerator generator = KeyGenerator.getInstance("HmacSHA256");
-            SecretKey key = generator.generateKey();
-            SecretKey = Base64.getEncoder().encodeToString(key.getEncoded());
-
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    @Value("${jwt.secret}")
+    private String SecretKey;
 
     public String generateToken(String username, Role role){
-        Map<String, Objects> claims = new HashMap<>();
 
         return Jwts.builder()
-                .claims()
-                .add(claims)
                 .subject(username)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 60 * 1000 * 15))
-                .and()
                 .claim("Role", role)
                 .signWith(getKey())
                 .compact();

@@ -14,4 +14,6 @@ public class ApiRegistrationBodyDto {
     private String link;
     @Size(max = 500)
     private String apiDescription;
+    @NotBlank
+    private int rateLimitPerMinute;
 }

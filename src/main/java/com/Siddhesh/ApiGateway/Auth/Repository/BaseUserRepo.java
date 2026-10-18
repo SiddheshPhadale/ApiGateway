@@ -4,5 +4,5 @@ import com.Siddhesh.ApiGateway.Auth.Entity.BaseUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BaseUserRepo extends JpaRepository<BaseUser, Long> {
-    BaseUser findByUserName(String name);
+    <optional>BaseUser findByUserName(String name);
 }

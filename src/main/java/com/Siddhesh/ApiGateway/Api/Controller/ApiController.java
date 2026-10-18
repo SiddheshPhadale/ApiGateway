@@ -35,4 +35,6 @@ public class ApiController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return new ResponseEntity<>(service.registerApi(body, authentication.getName()), HttpStatus.CREATED);
     }
+
+    
 }

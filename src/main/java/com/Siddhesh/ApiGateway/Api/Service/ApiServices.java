@@ -56,4 +56,11 @@ public class ApiServices {
             return originalList.stream().map(ApiMapper::mapToResponceApiDto).toList();
         }else throw new UserNotFoundException("User is not present!!");
     }
+    
+    
+    public List<ApiResponseDto> getAllApi(){
+        List<ApiBody> allApis = apiRepo.findAll();
+        return allApis.stream().map(ApiMapper::mapToResponceApiDto).toList();
+    }
+
 }

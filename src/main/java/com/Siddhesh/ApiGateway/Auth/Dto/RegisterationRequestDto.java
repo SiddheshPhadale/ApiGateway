@@ -3,6 +3,7 @@ package com.Siddhesh.ApiGateway.Auth.Dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
@@ -13,6 +14,6 @@ public class RegisterationRequestDto {
     @Email
     private String userEmail;
     @NotBlank
-    @Min(8)
+    @Size(min = 8, max = 50)
     private String password;
 }

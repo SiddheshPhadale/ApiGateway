@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import com.Siddhesh.ApiGateway.Api.Service.ApiServices;
+import com.Siddhesh.ApiGateway.Api.Dto.ApiResponseDto;
 
 import java.util.List;
 
@@ -19,6 +21,8 @@ import java.util.List;
 public class ApiSubscriptionController {
 
     private final SubscriptionService service;
+
+    private final ApiServices ApiServices;
 
     @PostMapping
     public ResponseEntity<SubscriptionResponseDto> subscribe(@Valid @RequestBody SubscriptionRequestDto subscriptionRequestDto){
@@ -30,6 +34,11 @@ public class ApiSubscriptionController {
     public ResponseEntity<List<SubscriptionResponseDto>> getAllSubscriptions(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return new ResponseEntity<>(service.getAllSubscriptions(authentication.getName()), HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<ApiResponseDto>> getAllApi(){
+        return ResponseEntity.ok(ApiServices.getAllApi());
     }
 }
 

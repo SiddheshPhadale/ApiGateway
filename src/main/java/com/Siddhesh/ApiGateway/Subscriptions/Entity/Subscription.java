@@ -3,6 +3,7 @@ package com.Siddhesh.ApiGateway.Subscriptions.Entity;
 import com.Siddhesh.ApiGateway.Api.Entity.ApiBody;
 import com.Siddhesh.ApiGateway.Api.Entity.Status;
 import com.Siddhesh.ApiGateway.Auth.Entity.ApiConsumer;
+import com.Siddhesh.ApiGateway.Payments.Entities.ApiPlan;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -23,6 +24,9 @@ import lombok.Data;
         private String apiKey;
         @Enumerated(EnumType.STRING)
         private Status status;
+        @ManyToOne
+        @JoinColumn(name = "plan_id")
+        private ApiPlan plan;
     }
 
 
