@@ -14,7 +14,16 @@ import tools.jackson.databind.json.JsonMapper;
 public class AppConfig {
     @Bean
     public RestTemplate restTemplate(){
-        return new RestTemplate();
+        org.springframework.http.client.SimpleClientHttpRequestFactory factory =
+                new org.springframework.http.client.SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(java.time.Duration.ofMillis(5000));
+        factory.setReadTimeout(java.time.Duration.ofMillis(10000));
+        return new RestTemplate(factory);
+    }
+
+    @Bean
+    public org.springframework.data.redis.core.StringRedisTemplate stringRedisTemplate(RedisConnectionFactory factory) {
+        return new org.springframework.data.redis.core.StringRedisTemplate(factory);
     }
 
     @Bean("redisObjectMapper")

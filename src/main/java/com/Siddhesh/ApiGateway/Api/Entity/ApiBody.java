@@ -1,28 +1,44 @@
 package com.Siddhesh.ApiGateway.Api.Entity;
 
+import com.Siddhesh.ApiGateway.Auth.Entity.ApiProvider;
 import com.Siddhesh.ApiGateway.Payments.Entities.ApiPlan;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "Api_Details")
 public class ApiBody {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "api_id")
     private Long apiId;
-    @Column(nullable = false)
+
+    @Column(nullable = false, unique = true)
     private String apiName;
+
     @Column(nullable = false)
     private String link;
+
     @Size(max = 500)
     private String apiDescription;
-    private Status status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status = Status.ACTIVE;
+
     private int rateLimitPerMinute;
-    @OneToMany(mappedBy = "api", cascade = CascadeType.ALL)
-    private List<ApiPlan> plans;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private ApiProvider provider;
+
+    @OneToMany(mappedBy = "api", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ApiPlan> plans = new ArrayList<>();
 }

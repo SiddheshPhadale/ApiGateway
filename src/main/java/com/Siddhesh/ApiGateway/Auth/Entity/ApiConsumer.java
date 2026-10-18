@@ -2,18 +2,19 @@ package com.Siddhesh.ApiGateway.Auth.Entity;
 
 import com.Siddhesh.ApiGateway.Subscriptions.Entity.Subscription;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.ToString;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
-@PrimaryKeyJoinColumn
+@Getter
+@Setter
+@PrimaryKeyJoinColumn(name = "user_id")
 @Table(name = "api_consumers")
-@ToString(exclude = "subscriptions")
-public class ApiConsumer extends BaseUser{
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private List<Subscription> subscriptions;
+public class ApiConsumer extends BaseUser {
+
+    @OneToMany(mappedBy = "consumer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Subscription> subscriptions = new ArrayList<>();
 }

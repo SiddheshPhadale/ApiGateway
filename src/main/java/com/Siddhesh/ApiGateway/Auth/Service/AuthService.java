@@ -10,6 +10,7 @@ import com.Siddhesh.ApiGateway.Auth.Entity.BaseUser;
 import com.Siddhesh.ApiGateway.Auth.Entity.Role;
 import com.Siddhesh.ApiGateway.Auth.Repository.ApiConsumerRepo;
 import com.Siddhesh.ApiGateway.Auth.Repository.ApiOwnerRepo;
+import com.Siddhesh.ApiGateway.Exceptions.UserNotFoundException;
 import com.Siddhesh.ApiGateway.Auth.Repository.BaseUserRepo;
 import com.Siddhesh.ApiGateway.Auth.Mapper.ApiProviderMapper;
 import com.Siddhesh.ApiGateway.Auth.Mapper.ConsumerMapper;
@@ -39,12 +40,21 @@ public class AuthService {
 
     public LoginResponseDto login(LoginDto loginDto){
         BaseUser baseUser = baseUserRepo.findByUserName(loginDto.getUserName());
+        if (baseUser == null) {
+            throw new UserNotFoundException("User not found with username: " + loginDto.getUserName());
+        }
         LoginResponseDto responseDto = loginMapper.mapToLoginResponseDto(baseUser);
         responseDto.setJwtToken(jwtService.generateToken(responseDto.getUserName(), responseDto.getRole()));
         return responseDto;
     }
 
     public RegistrationResponseDto registerConsumer(RegisterationRequestDto consumerDto){
+        if (baseUserRepo.existsByUserName(consumerDto.getUserName())) {
+            throw new com.Siddhesh.ApiGateway.Exceptions.UserAlreadyExistsException("Username '" + consumerDto.getUserName() + "' is already taken.");
+        }
+        if (baseUserRepo.existsByUserEmail(consumerDto.getUserEmail())) {
+            throw new com.Siddhesh.ApiGateway.Exceptions.UserAlreadyExistsException("Email '" + consumerDto.getUserEmail() + "' is already registered.");
+        }
         ApiConsumer consumer = consumerMapper.mapToApiConsumer(consumerDto);
         consumer.setRole(Role.CONSUMER);
         consumer.setPassword(passwordEncoder.encode(consumerDto.getPassword()));
@@ -57,13 +67,19 @@ public class AuthService {
     }
 
     public RegistrationResponseDto registerProvider(RegisterationRequestDto userDto){
+        if (baseUserRepo.existsByUserName(userDto.getUserName())) {
+            throw new com.Siddhesh.ApiGateway.Exceptions.UserAlreadyExistsException("Username '" + userDto.getUserName() + "' is already taken.");
+        }
+        if (baseUserRepo.existsByUserEmail(userDto.getUserEmail())) {
+            throw new com.Siddhesh.ApiGateway.Exceptions.UserAlreadyExistsException("Email '" + userDto.getUserEmail() + "' is already registered.");
+        }
         ApiProvider apiProvider = providerMapper.mapToApiProvider(userDto);
         apiProvider.setRole(Role.PROVIDER);
         apiProvider.setPassword(passwordEncoder.encode(userDto.getPassword()));
         ApiProvider savedProvider = userRepo.save(apiProvider);
         RegistrationResponseDto responseDto = new RegistrationResponseDto();
         responseDto.setUserName(savedProvider.getUserName());
-        responseDto.setRole(Role.CONSUMER);
+        responseDto.setRole(Role.PROVIDER);
         responseDto.setMsg("Account created with USERNAME : " + responseDto.getUserName());
         return responseDto;
     }

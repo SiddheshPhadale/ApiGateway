@@ -22,7 +22,7 @@ public class AuthController {
     private final AuthenticationManager manager;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginDto loginDto){
+    public ResponseEntity<LoginResponseDto> login(@RequestBody @Valid LoginDto loginDto){
         manager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUserName(), loginDto.getPassword()));
         return new ResponseEntity<>(service.login(loginDto), HttpStatus.OK);
     }

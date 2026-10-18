@@ -15,5 +15,9 @@ public interface ApiMapper {
     @Mapping(source = "link", target = "apiLink")
     ApiResponseDto mapToApiRegistrationResponse(ApiBody apiBody);
 
+    @Mapping(target = "apiId", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "provider", ignore = true)
+    @Mapping(target = "plans", ignore = true)
     ApiBody mapToApiBody(ApiRegistrationBodyDto apiDto);
 }

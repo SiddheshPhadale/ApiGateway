@@ -21,24 +21,29 @@ import java.util.List;
 public class ApiSubscriptionController {
 
     private final SubscriptionService service;
-
-    private final ApiServices ApiServices;
+    private final ApiServices apiServices;
 
     @PostMapping
     public ResponseEntity<SubscriptionResponseDto> subscribe(@Valid @RequestBody SubscriptionRequestDto subscriptionRequestDto){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return new ResponseEntity<>(service.subscribe(subscriptionRequestDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(service.subscribe(subscriptionRequestDto, authentication.getName()), HttpStatus.CREATED);
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<SubscriptionResponseDto>> getAllSubscriptions(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return new ResponseEntity<>(service.getAllSubscriptions(authentication.getName()), HttpStatus.OK);
     }
 
+    @DeleteMapping("/{subId}")
+    public ResponseEntity<Void> cancelSubscription(@PathVariable Long subId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        service.cancelSubscription(subId, authentication.getName());
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/all")
     public ResponseEntity<List<ApiResponseDto>> getAllApi(){
-        return ResponseEntity.ok(ApiServices.getAllApi());
+        return ResponseEntity.ok(apiServices.getAllApi());
     }
 }
-

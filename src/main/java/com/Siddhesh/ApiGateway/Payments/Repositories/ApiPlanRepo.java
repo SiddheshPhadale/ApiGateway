@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ApiPlanRepo extends JpaRepository<ApiPlan, Long> {
-    List<ApiPlan> findByApiApiIdAndStatus(int apiId, Status status);
+    List<ApiPlan> findByApiApiIdAndStatus(Long apiId, Status status);
 }

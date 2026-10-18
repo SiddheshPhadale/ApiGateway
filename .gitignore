@@ -1,8 +1,10 @@
 # Default ignored files
 /shelf/
-/.idea/workspace.xml
-
-/target/
 /.idea/
 *.iml
 .env
+.env.*
+!.env.example
+/target/
+*.log
+

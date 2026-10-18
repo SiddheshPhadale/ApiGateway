@@ -25,19 +25,30 @@ public class PaymentController {
     @PostMapping("/create-order")
     public ResponseEntity<CreateOrderResponse> createOrder(
             @Valid @RequestBody CreateOrderRequest request) throws Exception {
-        return ResponseEntity.ok(paymentService.createOrder(request));
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return ResponseEntity.ok(paymentService.createOrder(request, auth.getName()));
     }
 
     // ── Consumer: verify payment + activate subscription ──────────────
     @PostMapping("/verify")
     public ResponseEntity<VerifyPaymentResponse> verifyPayment(
             @Valid @RequestBody VerifyPaymentRequest request) throws Exception {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(paymentService.verifyPayment(request));
+                .body(paymentService.verifyPayment(request, auth.getName()));
     }
 
-    // ── Consumer: browse plans for an API ────────────────────────────
+//     ── Razorpay Webhook ──────────────────────────────────────────────
+//    @PostMapping("/webhook")
+//    public ResponseEntity<String> handleWebhook(
+//            @RequestBody String payload,
+//            @RequestHeader(value = "X-Razorpay-Signature", required = false) String signature) {
+//        paymentService.handleWebhook(payload, signature);
+//        return ResponseEntity.ok("Webhook processed");
+//    }
+
+    // ── Consumer / Provider: browse plans for an API ─────────────────
     @GetMapping("/plans/{apiId}")
     public ResponseEntity<List<ApiPlanResponse>> getPlans(@PathVariable Long apiId) {
         return ResponseEntity.ok(planService.getPlansForApi(apiId));

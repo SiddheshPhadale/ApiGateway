@@ -28,13 +28,38 @@ public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
 
+    @org.springframework.beans.factory.annotation.Value("${cors.allowed-origins:http://localhost:3000,http://localhost:5173}")
+    private String allowedOrigins;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED);
+                            response.setContentType(org.springframework.http.MediaType.APPLICATION_JSON_VALUE);
+                            response.getWriter().write("{\"status\":401,\"error\":\"Unauthorized\",\"message\":\"Authentication required: " + authException.getMessage() + "\"}");
+                        })
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setStatus(jakarta.servlet.http.HttpServletResponse.SC_FORBIDDEN);
+                            response.setContentType(org.springframework.http.MediaType.APPLICATION_JSON_VALUE);
+                            response.getWriter().write("{\"status\":403,\"error\":\"Forbidden\",\"message\":\"Access denied: " + accessDeniedException.getMessage() + "\"}");
+                        })
+                )
                 .authorizeHttpRequests(httpRequest ->
                         httpRequest.requestMatchers("/api/v1/auth/**", "/proxy/**").permitAll()
+                                .requestMatchers(
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html",
+                                        "/v3/api-docs/**"
+                                ).permitAll()
+                                .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/payment/webhook").permitAll()
+                                .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/payment/plans/**").permitAll()
+                                .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/payment/plans/**").hasAuthority("PROVIDER")
+                                .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/api/v1/payment/plans/**").hasAuthority("PROVIDER")
+                                .requestMatchers("/api/v1/payment/create-order", "/api/v1/payment/verify").hasAuthority("CONSUMER")
                                 .requestMatchers("/api/v1/apis/**").hasAuthority("PROVIDER")
                                 .requestMatchers("/api/v1/subscription/**").hasAuthority("CONSUMER")
                                 .anyRequest().authenticated()
@@ -48,9 +73,13 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("*"));
+        List<String> origins = java.util.Arrays.stream(allowedOrigins.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toList();
+        configuration.setAllowedOrigins(origins);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"));
-        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "api-key", "X-Razorpay-Signature"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

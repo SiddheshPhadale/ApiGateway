@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class PaymentConfig {
 
-    @Value("${razorpay.key.id}")
+    @Value("${razorpay.key.id:}")
     private String keyId;
 
-    @Value("${razorpay.key.secret}")
+    @Value("${razorpay.key.secret:}")
     private String keySecret;
 
     @Getter
@@ -21,8 +21,15 @@ public class PaymentConfig {
     private double commissionRate;
 
     @Bean
-    public RazorpayClient razorpayClient() throws RazorpayException {
-        return new RazorpayClient(keyId, keySecret);
+    public RazorpayClient razorpayClient() {
+        try {
+            if (keyId != null && !keyId.trim().isEmpty() && keySecret != null && !keySecret.trim().isEmpty()) {
+                return new RazorpayClient(keyId, keySecret);
+            }
+            return new RazorpayClient("dummy_key", "dummy_secret");
+        } catch (RazorpayException e) {
+            throw new IllegalStateException("Failed to initialize RazorpayClient: " + e.getMessage(), e);
+        }
     }
 
 }

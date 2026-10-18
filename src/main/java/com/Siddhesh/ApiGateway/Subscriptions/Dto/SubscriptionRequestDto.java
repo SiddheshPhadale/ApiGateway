@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class SubscriptionRequestDto {
-    private String userName;
+    private Long apiId;
     private String apiName;
+    private String userName;
 }

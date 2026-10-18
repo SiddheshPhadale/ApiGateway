@@ -28,17 +28,21 @@ public class PlanService {
     // ── Provider creates a plan ───────────────────────────────────────
     @Transactional
     public ApiPlanResponse createPlan(Long apiId, CreatePlanRequest request, String providerUserName) {
-        ApiBody api = apiRepo.findById(Math.toIntExact(apiId))
+        ApiBody api = apiRepo.findById(apiId)
                 .orElseThrow(() -> new ResourceNotFoundException("API not found"));
 
         ApiProvider provider = providerRepo.findByUserName(providerUserName);
         if (provider == null)
             throw new ResourceNotFoundException("Provider not found");
 
+        if (api.getProvider() == null || !api.getProvider().getUserName().equals(providerUserName)) {
+            throw new SecurityException("You do not own the API with ID: " + apiId);
+        }
+
         ApiPlan plan = new ApiPlan();
         plan.setApi(api);
         plan.setPlanName(request.getPlanName());
-        plan.setPrice(BigDecimal.valueOf(request.getPrice()));
+        plan.setPrice(request.getPrice());
         plan.setRateLimitPerMinute(request.getRateLimitPerMinute());
         plan.setDescription(request.getDescription());
         plan.setStatus(Status.ACTIVE);
@@ -50,7 +54,7 @@ public class PlanService {
     // ── Get all plans for an API ──────────────────────────────────────
     @Transactional(readOnly = true)
     public List<ApiPlanResponse> getPlansForApi(Long apiId) {
-        return planRepo.findByApiApiIdAndStatus(Math.toIntExact(apiId), Status.ACTIVE)
+        return planRepo.findByApiApiIdAndStatus(apiId, Status.ACTIVE)
                 .stream()
                 .map(this::toResponse)
                 .toList();
@@ -61,6 +65,12 @@ public class PlanService {
     public void deactivatePlan(Long planId, String providerUserName) {
         ApiPlan plan = planRepo.findById(planId)
                 .orElseThrow(() -> new ResourceNotFoundException("Plan not found"));
+
+        if (plan.getApi() == null || plan.getApi().getProvider() == null ||
+                !plan.getApi().getProvider().getUserName().equals(providerUserName)) {
+            throw new SecurityException("You do not own the API associated with this plan");
+        }
+
         plan.setStatus(Status.SUSPENDED);
         planRepo.save(plan);
     }

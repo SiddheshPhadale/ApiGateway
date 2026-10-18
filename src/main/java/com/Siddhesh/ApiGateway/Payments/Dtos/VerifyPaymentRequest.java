@@ -1,23 +1,20 @@
 package com.Siddhesh.ApiGateway.Payments.Dtos;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class VerifyPaymentRequest {
-    @NotBlank
+    @NotBlank(message = "Razorpay order ID is required")
     private String razorpayOrderId;
 
-    @NotBlank
+    @NotBlank(message = "Razorpay payment ID is required")
     private String razorpayPaymentId;
 
-    @NotBlank
+    @NotBlank(message = "Razorpay signature is required")
     private String razorpaySignature;
 
-    @NotNull
+    // Optional fields retained for backwards-compatibility; server uses persisted order and authenticated identity
     private Long planId;
-
-    @NotBlank
     private String userName;
 }
