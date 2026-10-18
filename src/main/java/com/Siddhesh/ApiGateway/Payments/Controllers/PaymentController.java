@@ -72,4 +72,18 @@ public class PaymentController {
         planService.deactivatePlan(planId, auth.getName());
         return ResponseEntity.noContent().build();
     }
+
+    // Provider: update an existing plan
+    @PutMapping("/plans/{planId}")
+    public ResponseEntity<ApiPlanResponse> updatePlan(
+            @PathVariable Long planId,
+            @Valid @RequestBody CreatePlanRequest request) {
+
+        Authentication auth =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        return ResponseEntity.ok(
+                planService.updatePlan(planId, request, auth.getName())
+        );
+    }
 }

@@ -2,6 +2,8 @@ package com.Siddhesh.ApiGateway.Payments.Dtos;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class ApiPlanResponse {
     private Long planId;

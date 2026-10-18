@@ -1,5 +1,6 @@
 package com.Siddhesh.ApiGateway.Subscriptions.Service;
 
+import com.Siddhesh.ApiGateway.Subscriptions.Dto.ApiKeyResponseDto;
 import com.Siddhesh.ApiGateway.Subscriptions.Dto.SubscriptionRequestDto;
 import com.Siddhesh.ApiGateway.Subscriptions.Dto.SubscriptionResponseDto;
 import com.Siddhesh.ApiGateway.Api.Entity.ApiBody;
@@ -17,6 +18,8 @@ import com.Siddhesh.ApiGateway.Payments.Entities.ApiPlan;
 import com.Siddhesh.ApiGateway.Payments.Repositories.ApiPlanRepo;
 import com.Siddhesh.ApiGateway.Subscriptions.Repository.SubscriptionRepo;
 import com.Siddhesh.ApiGateway.Subscriptions.Mapper.SubscriptionMapper;
+import org.jspecify.annotations.Nullable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -94,8 +97,13 @@ public class SubscriptionService {
             throw new SecurityException("You do not have permission to cancel this subscription");
         }
 
-        sub.setStatus(Status.SUSPENDED);
-        subRepo.save(sub);
+        ApiConsumer consumer = sub.getConsumer();
+
+        if (consumer.getSubscriptions() != null) {
+            consumer.getSubscriptions().remove(sub);
+        }
+
+        subRepo.delete(sub);
 
         // Invalidate Redis cache
         cacheService.deleteSubscription(sub.getApiKey());
@@ -121,5 +129,28 @@ public class SubscriptionService {
         byte[] bytes = new byte[32];
         random.nextBytes(bytes);
         return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
+    }
+
+    @Transactional(readOnly = true)
+    public ApiKeyResponseDto getApiKey(Long subscriptionId, String authenticatedUsername) {
+
+        Subscription subscription = subRepo.findById(subscriptionId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Subscription not found"));
+
+        if (!subscription.getConsumer().getUserName()
+                .equals(authenticatedUsername)) {
+            throw new AccessDeniedException(
+                    "You are not authorized to access this API key"
+            );
+        }
+
+        if (subscription.getStatus() != Status.ACTIVE) {
+            throw new IllegalStateException(
+                    "Subscription is not active"
+            );
+        }
+
+        return new ApiKeyResponseDto(subscription.getApiKey());
     }
 }

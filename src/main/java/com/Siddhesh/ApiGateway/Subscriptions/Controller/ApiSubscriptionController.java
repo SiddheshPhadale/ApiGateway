@@ -1,5 +1,6 @@
 package com.Siddhesh.ApiGateway.Subscriptions.Controller;
 
+import com.Siddhesh.ApiGateway.Subscriptions.Dto.ApiKeyResponseDto;
 import com.Siddhesh.ApiGateway.Subscriptions.Dto.SubscriptionRequestDto;
 import com.Siddhesh.ApiGateway.Subscriptions.Dto.SubscriptionResponseDto;
 import com.Siddhesh.ApiGateway.Subscriptions.Service.SubscriptionService;
@@ -45,5 +46,17 @@ public class ApiSubscriptionController {
     @GetMapping("/all")
     public ResponseEntity<List<ApiResponseDto>> getAllApi(){
         return ResponseEntity.ok(apiServices.getAllApi());
+    }
+
+    @GetMapping("/{subscriptionId}/key")
+    public ResponseEntity<ApiKeyResponseDto> getApiKey(@PathVariable Long subscriptionId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        return ResponseEntity.ok(
+                service.getApiKey(
+                        subscriptionId,
+                        authentication.getName()
+                )
+        );
     }
 }

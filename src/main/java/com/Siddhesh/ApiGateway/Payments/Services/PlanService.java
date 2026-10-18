@@ -10,7 +10,9 @@ import com.Siddhesh.ApiGateway.Payments.Dtos.ApiPlanResponse;
 import com.Siddhesh.ApiGateway.Payments.Dtos.CreatePlanRequest;
 import com.Siddhesh.ApiGateway.Payments.Entities.ApiPlan;
 import com.Siddhesh.ApiGateway.Payments.Repositories.ApiPlanRepo;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,5 +87,34 @@ public class PlanService {
         response.setRateLimitPerMinute(plan.getRateLimitPerMinute());
         response.setStatus(plan.getStatus().name());
         return response;
+    }
+
+    @Transactional
+    public ApiPlanResponse updatePlan(Long planId, CreatePlanRequest request, String username) {
+
+        // Find the existing plan
+        ApiPlan plan = planRepo.findById(planId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Plan not found"));
+
+        // Verify that the logged-in provider owns the API
+        ApiBody api = plan.getApi();
+
+        if (api.getProvider() == null ||
+                !api.getProvider().getUserName().equals(username)) {
+            throw new org.springframework.security.access.AccessDeniedException(
+                    "You are not authorized to update this plan");
+        }
+
+        // Update plan details
+        plan.setPlanName(request.getPlanName());
+        plan.setPrice(request.getPrice());
+        plan.setRateLimitPerMinute(request.getRateLimitPerMinute());
+        plan.setDescription(request.getDescription());
+
+        // Save and return the updated plan
+        ApiPlan updatedPlan = planRepo.save(plan);
+
+        return toResponse(updatedPlan);
     }
 }
