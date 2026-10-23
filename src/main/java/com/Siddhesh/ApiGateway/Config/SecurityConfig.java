@@ -50,6 +50,8 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(httpRequest ->
                         httpRequest.requestMatchers("/api/v1/auth/**", "/proxy/**").permitAll()
+                                .requestMatchers("/api/analytics/provider/**").hasAuthority("PROVIDER")
+                                .requestMatchers("/api/analytics/subscriber/**").hasAuthority("CONSUMER")
                                 .requestMatchers(
                                         "/swagger-ui/**",
                                         "/swagger-ui.html",

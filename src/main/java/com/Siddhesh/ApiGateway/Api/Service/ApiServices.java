@@ -47,6 +47,13 @@ public class ApiServices {
         urlValidator.validateUrl(apiDto.getLink());
 
         ApiBody body = apiMapper.mapToApiBody(apiDto);
+
+// Keep a fallback for subscriptions that do not have an assigned plan.
+// Normal subscriptions should use their plan's rate limit.
+        if (apiDto.getRateLimitPerMinute() == null) {
+            body.setRateLimitPerMinute(60);
+        }
+
         body.setStatus(Status.ACTIVE);
         body.setProvider(apiProvider);
         ApiBody apiBody = apiRepo.save(body);

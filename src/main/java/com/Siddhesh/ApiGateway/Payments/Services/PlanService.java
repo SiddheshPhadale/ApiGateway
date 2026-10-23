@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.Siddhesh.ApiGateway.Gateway.Service.CacheService;
+import com.Siddhesh.ApiGateway.Subscriptions.Repository.SubscriptionRepo;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,6 +28,8 @@ public class PlanService {
     private final ApiPlanRepo planRepo;
     private final ApiRepo apiRepo;
     private final ApiOwnerRepo providerRepo;
+    private final CacheService cacheService;
+    private final SubscriptionRepo subscriptionRepo;
 
     // ── Provider creates a plan ───────────────────────────────────────
     @Transactional
@@ -114,6 +118,17 @@ public class PlanService {
 
         // Save and return the updated plan
         ApiPlan updatedPlan = planRepo.save(plan);
+
+// Invalidate cached subscriptions for consumers of this API.
+// The next request reloads the current plan rate limit from the database.
+        List<com.Siddhesh.ApiGateway.Subscriptions.Entity.Subscription> subscriptions =
+                subscriptionRepo.findByApiApiId(api.getApiId());
+
+        if (subscriptions != null) {
+            for (var subscription : subscriptions) {
+                cacheService.deleteSubscription(subscription.getApiKey());
+            }
+        }
 
         return toResponse(updatedPlan);
     }

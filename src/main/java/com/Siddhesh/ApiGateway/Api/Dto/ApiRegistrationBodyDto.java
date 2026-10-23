@@ -1,3 +1,4 @@
+
 package com.Siddhesh.ApiGateway.Api.Dto;
 
 import jakarta.validation.constraints.Min;
@@ -19,7 +20,8 @@ public class ApiRegistrationBodyDto {
     @Size(max = 500)
     private String apiDescription;
 
-    @jakarta.validation.constraints.NotNull(message = "Rate limit is required")
+    // Optional legacy fallback. The subscription plan determines
+    // the effective rate limit for subscribed consumers.
     @Min(value = 1, message = "Rate limit must be at least 1")
     private Integer rateLimitPerMinute;
 }

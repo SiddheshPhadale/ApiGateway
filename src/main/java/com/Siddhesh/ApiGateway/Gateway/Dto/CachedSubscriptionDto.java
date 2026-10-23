@@ -23,4 +23,5 @@ public class CachedSubscriptionDto implements Serializable {
     private Long apiId;
     private Long planId;
     private String planName;
+    private Long subId;
 }

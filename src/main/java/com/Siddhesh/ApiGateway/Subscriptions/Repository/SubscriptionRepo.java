@@ -24,4 +24,6 @@ public interface SubscriptionRepo extends JpaRepository<Subscription, Long> {
     );
 
     List<Subscription> findByApiApiId(Long apiId);
+
+    Optional<Subscription> findBySubIdAndConsumer_UserName(Long subId, String userName);
 }
