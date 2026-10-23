@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
@@ -11,8 +13,8 @@ import lombok.Setter;
 @Table(name = "base_user")
 public class BaseUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID userId;
 
     @Column(unique = true, nullable = false)
     private String userName;

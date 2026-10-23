@@ -8,9 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface SubscriptionRepo extends JpaRepository<Subscription, Long> {
+public interface SubscriptionRepo extends JpaRepository<Subscription, UUID> {
     Subscription findByApiKey(String apiKey);
 
     boolean existsByConsumerAndApi(
@@ -23,7 +24,7 @@ public interface SubscriptionRepo extends JpaRepository<Subscription, Long> {
             ApiBody apiBody
     );
 
-    List<Subscription> findByApiApiId(Long apiId);
+    List<Subscription> findByApiApiId(UUID apiId);
 
-    Optional<Subscription> findBySubIdAndConsumer_UserName(Long subId, String userName);
+    Optional<Subscription> findBySubIdAndConsumer_UserName(UUID subId, String userName);
 }

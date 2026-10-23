@@ -20,6 +20,7 @@ import com.Siddhesh.ApiGateway.Subscriptions.Repository.SubscriptionRepo;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +34,7 @@ public class PlanService {
 
     // ── Provider creates a plan ───────────────────────────────────────
     @Transactional
-    public ApiPlanResponse createPlan(Long apiId, CreatePlanRequest request, String providerUserName) {
+    public ApiPlanResponse createPlan(UUID apiId, CreatePlanRequest request, String providerUserName) {
         ApiBody api = apiRepo.findById(apiId)
                 .orElseThrow(() -> new ResourceNotFoundException("API not found"));
 
@@ -59,7 +60,7 @@ public class PlanService {
 
     // ── Get all plans for an API ──────────────────────────────────────
     @Transactional(readOnly = true)
-    public List<ApiPlanResponse> getPlansForApi(Long apiId) {
+    public List<ApiPlanResponse> getPlansForApi(UUID apiId) {
         return planRepo.findByApiApiIdAndStatus(apiId, Status.ACTIVE)
                 .stream()
                 .map(this::toResponse)
@@ -68,7 +69,7 @@ public class PlanService {
 
     // ── Provider deactivates a plan ───────────────────────────────────
     @Transactional
-    public void deactivatePlan(Long planId, String providerUserName) {
+    public void deactivatePlan(UUID planId, String providerUserName) {
         ApiPlan plan = planRepo.findById(planId)
                 .orElseThrow(() -> new ResourceNotFoundException("Plan not found"));
 
@@ -94,7 +95,7 @@ public class PlanService {
     }
 
     @Transactional
-    public ApiPlanResponse updatePlan(Long planId, CreatePlanRequest request, String username) {
+    public ApiPlanResponse updatePlan(UUID planId, CreatePlanRequest request, String username) {
 
         // Find the existing plan
         ApiPlan plan = planRepo.findById(planId)

@@ -15,6 +15,7 @@ import com.Siddhesh.ApiGateway.Api.Service.ApiServices;
 import com.Siddhesh.ApiGateway.Api.Dto.ApiResponseDto;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,7 +38,7 @@ public class ApiSubscriptionController {
     }
 
     @DeleteMapping("/{subId}")
-    public ResponseEntity<Void> cancelSubscription(@PathVariable Long subId){
+    public ResponseEntity<Void> cancelSubscription(@PathVariable UUID subId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         service.cancelSubscription(subId, authentication.getName());
         return ResponseEntity.noContent().build();
@@ -49,7 +50,7 @@ public class ApiSubscriptionController {
     }
 
     @GetMapping("/{subscriptionId}/key")
-    public ResponseEntity<ApiKeyResponseDto> getApiKey(@PathVariable Long subscriptionId) {
+    public ResponseEntity<ApiKeyResponseDto> getApiKey(@PathVariable UUID subscriptionId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         return ResponseEntity.ok(

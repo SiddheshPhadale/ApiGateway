@@ -8,6 +8,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Entity
 @Getter
 @Setter
@@ -16,8 +18,8 @@ import lombok.Setter;
 })
 public class Subscription {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long subId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID subId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "api_id", nullable = false)

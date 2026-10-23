@@ -29,6 +29,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -89,7 +90,7 @@ public class SubscriptionService {
     }
 
     @Transactional
-    public void cancelSubscription(Long subId, String authenticatedUsername) {
+    public void cancelSubscription(UUID subId, String authenticatedUsername) {
         Subscription sub = subRepo.findById(subId)
                 .orElseThrow(() -> new ResourceNotFoundException("Subscription not found with ID: " + subId));
 
@@ -132,7 +133,7 @@ public class SubscriptionService {
     }
 
     @Transactional(readOnly = true)
-    public ApiKeyResponseDto getApiKey(Long subscriptionId, String authenticatedUsername) {
+    public ApiKeyResponseDto getApiKey(UUID subscriptionId, String authenticatedUsername) {
 
         Subscription subscription = subRepo.findById(subscriptionId)
                 .orElseThrow(() ->

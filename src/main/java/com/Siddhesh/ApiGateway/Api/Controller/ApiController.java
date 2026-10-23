@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,7 +36,7 @@ public class ApiController {
     }
 
     @PatchMapping("/{apiId}/status")
-    public ResponseEntity<Void> updateApiStatus(@PathVariable Long apiId, @RequestParam Status status){
+    public ResponseEntity<Void> updateApiStatus(@PathVariable UUID apiId, @RequestParam Status status){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         service.updateApiStatus(apiId, status, authentication.getName());
         return ResponseEntity.noContent().build();

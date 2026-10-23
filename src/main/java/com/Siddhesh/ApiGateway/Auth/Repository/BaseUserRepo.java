@@ -4,10 +4,10 @@ import com.Siddhesh.ApiGateway.Auth.Entity.BaseUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
+import java.util.UUID;
 
-public interface BaseUserRepo extends JpaRepository<BaseUser, Long> {
+public interface BaseUserRepo extends JpaRepository<BaseUser, UUID> {
     BaseUser findByUserName(String userName);
-    Optional<BaseUser> findOptionalByUserName(String userName);
     boolean existsByUserName(String userName);
     boolean existsByUserEmail(String userEmail);
 }

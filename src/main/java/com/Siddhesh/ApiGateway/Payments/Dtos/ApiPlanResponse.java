@@ -3,10 +3,11 @@ package com.Siddhesh.ApiGateway.Payments.Dtos;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 public class ApiPlanResponse {
-    private Long planId;
+    private UUID planId;
     private String planName;
     private String description;
     private double price;

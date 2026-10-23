@@ -62,7 +62,7 @@ public class ProxyService {
 
             int effectiveRateLimit = api.getRateLimitPerMinute();
             ApiPlan plan = subscription.getPlan();
-            Long planId = null;
+            UUID planId = null;
             String planName = null;
             if (plan != null) {
                 planId = plan.getPlanId();

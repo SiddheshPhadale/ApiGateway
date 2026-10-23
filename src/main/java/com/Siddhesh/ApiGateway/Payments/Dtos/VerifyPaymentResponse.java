@@ -2,6 +2,8 @@ package com.Siddhesh.ApiGateway.Payments.Dtos;
 
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 public class VerifyPaymentResponse {
     private String message;
@@ -9,5 +11,5 @@ public class VerifyPaymentResponse {
     private String planName;
     private String apiName;
     private int rateLimitPerMinute;
-    private String transactionId;
+    private UUID transactionId;
 }

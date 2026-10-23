@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -16,9 +17,9 @@ import java.util.List;
 @Table(name = "Api_Details")
 public class ApiBody {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "api_id")
-    private Long apiId;
+    private UUID apiId;
 
     @Column(nullable = false, unique = true)
     private String apiName;

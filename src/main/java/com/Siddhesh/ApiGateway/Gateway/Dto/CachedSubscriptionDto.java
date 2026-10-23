@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -20,8 +21,8 @@ public class CachedSubscriptionDto implements Serializable {
     private Status apiStatus;
     private int rateLimitPerMinute;
     private String apiKey;
-    private Long apiId;
-    private Long planId;
+    private UUID apiId;
+    private UUID planId;
     private String planName;
-    private Long subId;
+    private UUID subId;
 }

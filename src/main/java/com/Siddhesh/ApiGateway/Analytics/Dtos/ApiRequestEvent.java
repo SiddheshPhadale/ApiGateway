@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -16,8 +17,8 @@ public class ApiRequestEvent {
     private String eventId;
     private Instant timestamp;
 
-    private Long apiId;
-    private Long subscriptionId;
+    private UUID apiId;
+    private UUID subscriptionId;
 
     private String endpoint;
     private String httpMethod;

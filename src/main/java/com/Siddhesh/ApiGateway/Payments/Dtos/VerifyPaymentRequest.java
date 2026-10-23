@@ -3,6 +3,8 @@ package com.Siddhesh.ApiGateway.Payments.Dtos;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 public class VerifyPaymentRequest {
     @NotBlank(message = "Razorpay order ID is required")
@@ -15,6 +17,6 @@ public class VerifyPaymentRequest {
     private String razorpaySignature;
 
     // Optional fields retained for backwards-compatibility; server uses persisted order and authenticated identity
-    private Long planId;
+    private UUID planId;
     private String userName;
 }

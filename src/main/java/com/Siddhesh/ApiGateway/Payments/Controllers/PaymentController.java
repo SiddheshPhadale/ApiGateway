@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,14 +51,14 @@ public class PaymentController {
 
     // ── Consumer / Provider: browse plans for an API ─────────────────
     @GetMapping("/plans/{apiId}")
-    public ResponseEntity<List<ApiPlanResponse>> getPlans(@PathVariable Long apiId) {
+    public ResponseEntity<List<ApiPlanResponse>> getPlans(@PathVariable UUID apiId) {
         return ResponseEntity.ok(planService.getPlansForApi(apiId));
     }
 
     // ── Provider: create a plan for their API ────────────────────────
     @PostMapping("/plans/{apiId}")
     public ResponseEntity<ApiPlanResponse> createPlan(
-            @PathVariable Long apiId,
+            @PathVariable UUID apiId,
             @Valid @RequestBody CreatePlanRequest request) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return ResponseEntity
@@ -67,7 +68,7 @@ public class PaymentController {
 
     // ── Provider: deactivate a plan ───────────────────────────────────
     @DeleteMapping("/plans/{planId}")
-    public ResponseEntity<Void> deactivatePlan(@PathVariable Long planId) {
+    public ResponseEntity<Void> deactivatePlan(@PathVariable UUID planId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         planService.deactivatePlan(planId, auth.getName());
         return ResponseEntity.noContent().build();
@@ -76,7 +77,7 @@ public class PaymentController {
     // Provider: update an existing plan
     @PutMapping("/plans/{planId}")
     public ResponseEntity<ApiPlanResponse> updatePlan(
-            @PathVariable Long planId,
+            @PathVariable UUID planId,
             @Valid @RequestBody CreatePlanRequest request) {
 
         Authentication auth =

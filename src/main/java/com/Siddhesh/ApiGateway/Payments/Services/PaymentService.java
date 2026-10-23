@@ -152,7 +152,7 @@ public class PaymentService {
             response.setPlanName(transaction.getPlan().getPlanName());
             response.setApiName(transaction.getPlan().getApi().getApiName());
             response.setRateLimitPerMinute(transaction.getPlan().getRateLimitPerMinute());
-            response.setTransactionId(transaction.getTransactionId().toString());
+            response.setTransactionId(transaction.getTransactionId());
             return response;
         }
 
@@ -218,7 +218,7 @@ public class PaymentService {
         response.setPlanName(plan.getPlanName());
         response.setApiName(api.getApiName());
         response.setRateLimitPerMinute(plan.getRateLimitPerMinute());
-        response.setTransactionId(savedTx.getTransactionId().toString());
+        response.setTransactionId(savedTx.getTransactionId());
 
         return response;
     }

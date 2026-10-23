@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -15,8 +16,8 @@ import java.math.BigDecimal;
 public class ApiPlan {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long planId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID planId;
 
     @Column(nullable = false)
     private String planName;

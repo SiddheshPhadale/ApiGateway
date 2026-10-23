@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -86,7 +87,7 @@ public class ApiServices {
     }
 
     @Transactional
-    public void updateApiStatus(Long apiId, Status status, String providerUserName) {
+    public void updateApiStatus(UUID apiId, Status status, String providerUserName) {
         ApiBody api = apiRepo.findById(apiId)
                 .orElseThrow(() -> new ApiNotFound("API not found with ID: " + apiId));
 
