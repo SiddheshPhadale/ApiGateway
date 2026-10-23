@@ -1,0 +1,10 @@
+# Default ignored files
+/shelf/
+/.idea/
+*.iml
+.env
+.env.*
+!.env.example
+/target/
+*.log
+
